@@ -1,0 +1,49 @@
+<html>
+    <style text="text/css">
+        .command_block {
+            position: relative;
+            background-color: #C0C0C0;
+        }
+        .output_closer {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+        .command_string {
+            color: lavender;
+        }
+
+        #input {
+            font-family: courier;
+        }
+
+        #input:after {
+            content: "";
+            width:10px;
+            height:1em;
+            background-color: green;
+            display: inline-block;
+            vertical-align:bottom;
+        }
+
+        #cursor {
+            width: 10px;
+            height: 1em;
+            vertical-align:bottom;
+            display: inline-block;
+            background-color: green;
+        }
+
+    </style>
+<body>
+    <div id='output'>
+    </div>
+    <div id='prompt'>
+        <span id='path'></span>
+        <span id='prompt_text'>$</span>
+        <span id='input'></span>
+        <!--<span id='cursor'></span>-->
+    </div>
+</body>
+<script src="shell.js"></script>
+</html>
