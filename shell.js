@@ -1,10 +1,13 @@
+
+require(['path', 'block'], function (path, block) {
 console.log('hi')
 
 var PATH="/users/armen";
 
-var output = document.getElementById("output");
+var command_output = document.getElementById("output");
 var input = document.getElementById("input");
 var prompt = document.getElementById("prompt");
+var command_blocks = [];
 
 document.addEventListener('keypress', keypress, false);
 document.addEventListener('keydown', keydown, false);
@@ -16,7 +19,17 @@ function keypress(evt)
 
 function keydown(evt)
 {
-    if (evt.keyCode == 8) {
+    // 38 = up
+    // 40 = down
+    // 39 = right
+    // 37 = left
+    // 46 = delete
+    // 8 = backspace
+
+    if (evt.keyCode == 38) {
+       command_blocks[command_blocks.length-1].focus(); 
+    }
+    else if (evt.keyCode == 8) {
         var s = input.innerHTML;
         if (s.length > 0) {
             input.innerHTML = s.slice(0,-1);
@@ -35,26 +48,30 @@ function keydown(evt)
         }
         evt.preventDefault();
     }
-    else if (evt.keyCode == 76 && evt.ctrlKey) {
+    else if (evt.keyCode == 76 && evt.ctrlKey) { // ctrl-l
         clearAll();
+        evt.stopPropagation();
         evt.preventDefault();
     }
     else {
-        console.log(evt);
+        console.log("doc keydown:" + evt);
     }
 }
 
 function clearAll()
 {
-    for (var i = output.childNodes.length-1; i >= 0; --i) {
-        output.removeChild(output.childNodes[i]);
+    for (var i = command_output.childNodes.length-1; i >= 0; --i) {
+        command_output.removeChild(command_output.childNodes[i]);
     }
+    command_blocks.lenght = 0;
 }
 
 function item_remover(node)
 {
     return function () {
         node.parentNode.removeChild(node);
+        var idx = command_blocks.indexOf(node);
+        command_blocks.splice(idx, 1);
     }
 }
 
@@ -69,7 +86,8 @@ function builtins(command)
 {
     var parsed = command.split(" ");
     if (parsed[0] == 'cd') {
-        setPwd(parsed[1]);
+        var p = path.composePath(PATH, parsed[1]);
+        setPwd(p);
         return true;
     }
     else if (parsed[0] == 'view') {
@@ -90,6 +108,7 @@ function viewFile(path)
 {
     var out = document.createElement("div");
     out.setAttribute("class", "command_block");
+    out.setAttribute("tabIndex", "0");
 
 
     var cmd = document.createElement("pre");
@@ -103,7 +122,7 @@ function viewFile(path)
     cbut.addEventListener("click", item_remover(out), false);
     closer.appendChild(cbut);
 
-    output.appendChild(out);
+    command_output.appendChild(out);
 
     out.appendChild(cmd);
     out.appendChild(closer);
@@ -128,41 +147,27 @@ function viewFile(path)
 }
 
 
+
+
 function execute(command)
 {
     if (builtins(command))
         return;
 
-    var out = document.createElement("div");
-    out.setAttribute("class", "command_block");
-    var pre = document.createElement("pre");
-    pre.setAttribute("class", "shell_output");
-
-    var cmd = document.createElement("pre");
-    cmd.setAttribute("class", "command_string");
-    cmd.innerHTML = command;
-
-    var closer = document.createElement("div");
-    closer.setAttribute("class", "output_closer");
-    var cbut = document.createElement("button");
-    cbut.innerText="close";
-    cbut.addEventListener("click", item_remover(out), false);
-    closer.appendChild(cbut);
-
-    output.appendChild(out);
-
-    out.appendChild(cmd);
-    out.appendChild(closer);
-    out.appendChild(pre);
-
     var h = new XMLHttpRequest();
     var args = encodeURI('func=' + command + "&cwd="+PATH);
     h.open("GET", "/run?" +args, false);
     h.send(null);
-    pre.innerHTML += h.response;
+
+    var out = block.make_block(command, h.response, item_remover);
+
+    command_output.appendChild(out);
+    command_blocks.push(out);
 
     window.scrollTo(0, document.body.scrollHeight);
 }
 
 setPwd("/users/armen");
 execute("ls -al /usr");
+
+});

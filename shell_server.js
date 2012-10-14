@@ -19,7 +19,10 @@ var mimeTypes = {
 function return_code(req)
 {
     return function (code) {
-        req.write("\nexit code: " +code);
+        if (code != 0) {
+            req.write("\nexit code: " +code);
+        }
+        req.end();
     }
 }
 

@@ -3,11 +3,21 @@
         .command_block {
             position: relative;
             background-color: #C0C0C0;
+            tabindex: 0;
+        }
+        .command_block:focus {
+            background-color: pink;
         }
         .output_closer {
             position: absolute;
             right: 5px;
             top: 5px;
+            width: 50px;
+            height: 30px;
+        }
+        .output_closer > button {
+            width: 100%;
+            height: 100%;
         }
         .command_string {
             color: lavender;
@@ -35,6 +45,7 @@
         }
 
     </style>
+    <script data-main="shell" src="require.js"></script>
 <body>
     <div id='output'>
     </div>
@@ -42,8 +53,7 @@
         <span id='path'></span>
         <span id='prompt_text'>$</span>
         <span id='input'></span>
-        <!--<span id='cursor'></span>-->
     </div>
 </body>
-<script src="shell.js"></script>
 </html>
+
