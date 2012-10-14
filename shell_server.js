@@ -6,6 +6,8 @@ var http = require('http'),
     url = require('url'),
     path = require('path'),
     fs = require('fs');
+
+
 var mimeTypes = {
     "html": "text/html",
     "jpeg": "image/jpeg",
@@ -13,7 +15,8 @@ var mimeTypes = {
     "jpg": "image/jpeg",
     "png": "image/png",
     "js": "text/javascript",
-    "css": "text/css"};
+    "css": "text/css"
+};
 
 
 function return_code(req)
