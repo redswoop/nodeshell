@@ -44,6 +44,23 @@
             background-color: green;
         }
 
+        .filelist {
+            display: -webkit-flex;
+            -webkit-flex-flow: row wrap;
+        }
+
+        .fileitem {
+            /*display: inline-block;*/
+            -webkit-flex: 200px 0;
+        }
+        .fileitem:focus {
+            color: white;
+            background-color: blue;
+        }
+        .fileitem.selected {
+            color: red;
+        }
+
     </style>
     <script data-main="shell" src="require.js"></script>
 <body>

@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 
+    var ls = require("ls");
+
     function keydown(evt)
     {
         // 38 = up
@@ -20,13 +22,17 @@ define(function(require, exports, module) {
         console.log(evt);
     }
 
+    function parseResponse(response)
+    {
+        var files = response.split('\n');
+        console.log(files);
+    }
+
     exports.make_block = function(command, response, remover)
     {
         var out = document.createElement("div");
         out.setAttribute("class", "command_block");
         out.setAttribute("tabIndex", "0");
-        var pre = document.createElement("pre");
-        pre.setAttribute("class", "shell_output");
 
         var cmd = document.createElement("pre");
         cmd.setAttribute("class", "command_string");
@@ -42,9 +48,20 @@ define(function(require, exports, module) {
 
         out.appendChild(cmd);
         out.appendChild(closer);
-        out.appendChild(pre);
 
-        pre.innerHTML += response;
+       
+        console.log("command is: " + command);
+        if (command.match("^ls")) {
+            var parsed = ls.process(command, response);
+            var ui = ls.make_ui(parsed);
+            out.appendChild(ui);
+        }
+        else {
+            var pre = document.createElement("pre");
+            pre.setAttribute("class", "shell_output");
+            pre.innerHTML += response;
+            out.appendChild(pre);
+        }
 
         out.addEventListener("keydown", keydown);
         out.remover = remover(out);

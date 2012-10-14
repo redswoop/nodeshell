@@ -27,7 +27,8 @@ function keydown(evt)
     // 8 = backspace
 
     if (evt.keyCode == 38) {
-       command_blocks[command_blocks.length-1].focus(); 
+        command_blocks[command_blocks.length-1].focus(); 
+        evt.preventDefault();
     }
     else if (evt.keyCode == 8) {
         var s = input.innerHTML;
@@ -54,7 +55,8 @@ function keydown(evt)
         evt.preventDefault();
     }
     else {
-        console.log("doc keydown:" + evt);
+        console.log("doc keydown:");
+        console.log(evt);
     }
 }
 
@@ -168,6 +170,6 @@ function execute(command)
 }
 
 setPwd("/users/armen");
-execute("ls -al /usr");
+execute("ls -l");
 
 });
