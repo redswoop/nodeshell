@@ -9,8 +9,28 @@ var input = document.getElementById("input");
 var prompt = document.getElementById("prompt");
 var command_blocks = [];
 
+var focus_block = -1;
+
 document.addEventListener('keypress', keypress, false);
 document.addEventListener('keydown', keydown, false);
+
+
+document.addEventListener('focus', document_focus, true);
+
+function document_focus(evt)
+{
+    if (evt.target == document.body) {
+        console.log("doc focus") 
+        console.log(evt);
+        focus_block = -1;
+        console.log("Scrolling to " + document.body.scrollHeight);
+        window.scrollTo(0, document.body.scrollHeight);
+        evt.preventDefault();
+    }
+    else {
+    }
+}
+
 
 function keypress(evt)
 {
@@ -25,8 +45,20 @@ function keydown(evt)
     // 37 = left
     // 46 = delete
     // 8 = backspace
+   
 
-    if (evt.keyCode == 38) {
+    if (evt.keyCode == 80 && evt.ctrlKey) {
+        if (focus_block < 0) {
+            focus_block = command_blocks.length-1;
+        }
+        else if (focus_block > 0) {
+            focus_block--;
+        }
+        command_blocks[focus_block].focus();
+        evt.stopPropagation();
+        evt.preventDefault();
+    }
+    else if (evt.keyCode == 38) {
         command_blocks[command_blocks.length-1].focus(); 
         evt.preventDefault();
     }
@@ -38,8 +70,14 @@ function keydown(evt)
         evt.preventDefault();
     }
     else if (evt.keyCode == 27 || (evt.keyCode == 67 && evt.ctrlKey)) {
-        input.innerHTML = "";
+        if (evt.target != document.body) {
+            document.body.focus();
+        }
+        else {
+            input.innerHTML = "";
+        }
         evt.preventDefault();
+        evt.stopPropagation();
     }
     else if (evt.keyCode == 13) {
         var cmd = input.innerHTML;
@@ -66,6 +104,7 @@ function clearAll()
         command_output.removeChild(command_output.childNodes[i]);
     }
     command_blocks.lenght = 0;
+    focus_block = -1;
 }
 
 function item_remover(node)

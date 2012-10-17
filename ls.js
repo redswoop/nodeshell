@@ -10,11 +10,37 @@ define(function(require, exports, module) {
         }
     }
 
+
+    function keydown(evt,elem) 
+    {
+        if (evt.keyCode == 49) {
+            elem.sourceItems = elem.sourceItems.reverse();
+            add_items(elem, elem.sourceItems);
+            evt.preventDefault();
+            evt.stopPropagation();
+        }
+    }
+
+    function add_items(elem, items) {
+        elem.innerHTML = "";
+        for (var idx in items) {
+            var item = items[idx];
+            
+            var ielem  = document.createElement("div");
+            ielem.innerHTML = item.filename;
+            ielem.setAttribute("class", "fileitem");
+            ielem.setAttribute("tabindex", "0");
+            elem.appendChild(ielem);
+            ielem.addEventListener("keydown", file_keydown);
+        }
+    }
+
     exports.process = function(command, data) {
         var items = data.split("\n");
 
         var mapper;
         if (command.match("-l")) {
+            items = items.slice(1);
             mapper = function(item) {
                 var cols = item.split(/[\s]+/);
                 return {
@@ -44,18 +70,13 @@ define(function(require, exports, module) {
 
         var elem = document.createElement("div");
         elem.setAttribute("class", "filelist");
+        elem.setAttribute("tabindex", "0");
+
+
+        add_items(elem, items);
         
-        for (var idx in items) {
-            var item = items[idx];
-            
-            var ielem  = document.createElement("div");
-            ielem.innerHTML = item.filename;
-            ielem.setAttribute("class", "fileitem");
-            ielem.setAttribute("tabindex", "0");
-            elem.appendChild(ielem);
-            ielem.addEventListener("keydown", file_keydown);
-        }
         elem.sourceItems = items;
+        elem.addEventListener("keydown", function(evt) { keydown(evt, elem) });
 
         return elem;
     }

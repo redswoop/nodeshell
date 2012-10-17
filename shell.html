@@ -1,5 +1,11 @@
 <html>
     <style text="text/css">
+
+        body {
+            font-family: courier;
+            font-size: 12px;
+        }
+
         .command_block {
             position: relative;
             background-color: #C0C0C0;
@@ -49,9 +55,13 @@
             -webkit-flex-flow: row wrap;
         }
 
+        .filelist:focus {
+            background-color: yellow;
+        }
+
         .fileitem {
             /*display: inline-block;*/
-            -webkit-flex: 200px 0;
+            -webkit-flex: 150px 0;
         }
         .fileitem:focus {
             color: white;
@@ -63,13 +73,15 @@
 
     </style>
     <script data-main="shell" src="require.js"></script>
-<body>
-    <div id='output'>
-    </div>
-    <div id='prompt'>
-        <span id='path'></span>
-        <span id='prompt_text'>$</span>
-        <span id='input'></span>
+<body tabindex="0">
+    <div>
+        <div id='output'>
+        </div>
+        <div id='prompt'>
+            <span id='path'></span>
+            <span id='prompt_text'>$</span>
+            <span id='input'></span>
+        </div>
     </div>
 </body>
 </html>

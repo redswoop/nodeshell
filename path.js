@@ -12,9 +12,7 @@ define(function(require, exports, module) {
                 old_path = "";
 
             var parts = old_path == "" ? [] : old_path.split('/');
-            console.log(parts);
             parts.push.apply(parts, new_path.split('/'));
-            console.log(parts);
 
             for (var i = parts.length - 1; i >= 0; --i) {
                 if (parts[i] == '..') {
@@ -24,7 +22,6 @@ define(function(require, exports, module) {
                     parts.splice(i,1);
                 }
             }
-            console.log(parts);
 
             return "/" + parts.join("/");
         }
