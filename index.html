@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-  <html>
+  <!-- <html>
     <head>
       <meta charset="UTF-8">
       <title>Hello World!</title>
@@ -9,5 +9,100 @@
       We are using node <script>document.write(process.versions.node)</script>,
       Chrome <script>document.write(process.versions.chrome)</script>,
       and Electron <script>document.write(process.versions.electron)</script>.
+
+      <script>
+        const {ipcRenderer} = require('electron')    
+        console.log("sending")
+        ipcRenderer.send("test", {cmd:"hello"})
+      </script>
     </body>
-  </html>
+  </html> -->
+
+  <html>
+    <style text="text/css">
+
+        body {
+            font-family: courier;
+            font-size: 12px;
+        }
+
+        .command_block {
+            position: relative;
+            background-color: #C0C0C0;
+            tabindex: 0;
+        }
+        .command_block:focus {
+            background-color: pink;
+        }
+        .output_closer {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 50px;
+            height: 30px;
+        }
+        .output_closer > button {
+            width: 100%;
+            height: 100%;
+        }
+        .command_string {
+            color: lavender;
+        }
+
+        #input {
+            font-family: courier;
+        }
+
+        #input:after {
+            content: "";
+            width:10px;
+            height:1em;
+            background-color: green;
+            display: inline-block;
+            vertical-align:bottom;
+        }
+
+        #cursor {
+            width: 10px;
+            height: 1em;
+            vertical-align:bottom;
+            display: inline-block;
+            background-color: green;
+        }
+
+        .filelist {
+            display: -webkit-flex;
+            -webkit-flex-flow: row wrap;
+        }
+
+        .filelist:focus {
+            background-color: yellow;
+        }
+
+        .fileitem {
+            /*display: inline-block;*/
+            -webkit-flex: 150px 0;
+        }
+        .fileitem:focus {
+            color: white;
+            background-color: blue;
+        }
+        .fileitem.selected {
+            color: red;
+        }
+
+    </style>    
+  <body tabindex="0">
+    <div>
+        <div id='output'>
+        </div>
+        <div id='prompt'>
+            <span id='path'></span>
+            <span id='prompt_text'>$</span>
+            <span id='input'></span>
+        </div>
+    </div>
+    <script src="shell.js"></script>
+  </body>
+</html>
+
